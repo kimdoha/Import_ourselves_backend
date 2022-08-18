@@ -8,6 +8,7 @@ import { createHashedPassword } from 'functions/create.hashed-password';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './user.entity';
 import { UserRepository } from './user.repository';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -24,7 +25,8 @@ export class UsersService {
         const hashedPassword = await createHashedPassword(password);
 
         const user = await this.userRepository.create({ id, password: hashedPassword, nickname });
-
+        await this.userRepository.save(user);
+        
         return { 
             isSuccess: true,
             statusCode: 201,
@@ -32,4 +34,22 @@ export class UsersService {
             data: Object.assign(user, { password: undefined }) 
         };
     }
+
+    async login(id: string, password: string) {
+        const user = await this.userRepository.findOneBy({ id });
+        if(!user){
+            throw new BadRequestException('아이디가 존재하지 않습니다.');
+        }
+
+        if(!(await bcrypt.compare(password, user.password))){
+            throw new BadRequestException('비밀번호가 일치하지 않습니다.');
+        }
+        return { 
+            isSuccess: true,
+            statusCode: 200,
+            message: '로그인 성공',
+            data: Object.assign(user, { password: undefined }) 
+        };
+    }
+
 }
