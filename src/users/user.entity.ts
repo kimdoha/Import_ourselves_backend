@@ -1,4 +1,11 @@
-import { Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { 
+    Column, 
+    CreateDateColumn, 
+    DeleteDateColumn, 
+    Entity, 
+    PrimaryGeneratedColumn, 
+    UpdateDateColumn 
+} from "typeorm";
 
 @Entity('kurly.users')
 export class User {
@@ -10,7 +17,7 @@ export class User {
     id: string
 
     @Column()
-    password: string | any
+    password: string
 
     @Column()
     nickname: string
