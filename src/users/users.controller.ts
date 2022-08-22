@@ -13,7 +13,7 @@ import {
     ApiOperation, 
     ApiTags 
 } from '@nestjs/swagger';
-import { responseSuccessDto } from 'common/global.reponse';
+import { responseSuccessDto } from 'common/responses/global.reponse';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { UsersService } from './users.service';
@@ -43,7 +43,8 @@ export class UsersController {
     @ApiOperation({ summary: '로그인' })
     @ApiOkResponse({
         status: 200, 
-        description: '로그인 성공'
+        description: '로그인 성공',
+        type: responseSuccessDto,
     })
     @ApiBadRequestResponse({
         status: 400,
