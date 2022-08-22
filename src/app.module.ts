@@ -9,6 +9,7 @@ import {
   ConfigService 
 } from '@nestjs/config';
 import { typeOrmConfig } from 'configs/typeorm.config';
+import { EventsModule } from './events/events.module';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { typeOrmConfig } from 'configs/typeorm.config';
       isGlobal: true,
     }),
     UsersModule, 
-    ProductsModule
+    ProductsModule, EventsModule
   ],
   controllers: [AppController],
   providers: [AppService],
