@@ -13,7 +13,7 @@ import {
     ApiOperation, 
     ApiTags 
 } from '@nestjs/swagger';
-import { responseSuccessDto } from 'common/global.reponse';
+import { responseSuccessDto } from 'common/responses/global.reponse';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { LoginUserDto } from './dtos/login-user.dto';
 import { UsersService } from './users.service';

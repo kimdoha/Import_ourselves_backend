@@ -3,7 +3,7 @@ import {
     Injectable 
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { responseSuccessDto } from 'common/global.reponse';
+import { responseSuccessDto } from 'common/responses/global.reponse';
 import { createHashedPassword } from 'functions/create.hashed-password';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { User } from './user.entity';
