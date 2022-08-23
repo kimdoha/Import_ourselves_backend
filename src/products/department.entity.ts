@@ -1,6 +1,7 @@
-import { Column, CreateDateColumn, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Product } from "./product.entity";
 
+@Entity('kurly.departments')
 export class Department {
 
     @PrimaryGeneratedColumn()

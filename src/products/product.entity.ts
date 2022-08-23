@@ -11,34 +11,34 @@ export class Product {
     productName: string;
 
     @Column()
-    productImg: Text | null;
+    productImg: string | null;
 
     @Column()
-    isOrganic: Boolean;
+    isOrganic: number;
 
     @Column()
-    hotel: Boolean;
+    hotel: number;
 
     @Column()
-    camping: Boolean;
+    camping: number;
 
     @Column()
-    make: Boolean;
+    make: number;
 
     @Column()
-    instant: Boolean;
+    instant: number;
 
     @Column()
-    riceLover: Boolean;
+    riceLover: number;
 
     @Column()
-    desertLover: Boolean;
+    desertLover: number;
 
     @Column()
-    meatLover: Boolean;
+    meatLover: number;
 
     @Column()
-    vegetableLover: Boolean;
+    vegetableLover: number;
 
     @CreateDateColumn()
     createdAt: Date
