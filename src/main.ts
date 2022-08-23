@@ -12,7 +12,10 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup('/docs', app, document, swaggerCustomOptions);
 
-  await app.enableCors();
+  app.enableCors({ 
+    origin: ['http://kurlynurlybucket.s3-website.ap-northeast-2.amazonaws.com/'],
+  });
+  
   await app.listen(3000);
   console.info('Server is running on port 3000');
 
