@@ -32,9 +32,14 @@ export class ProductsController {
         description: '[헤더] 추천 상품 Top 리스트 조회 성공',
         type: responseSuccessDto
     })
-    @Get('/recommend/before')
-    async getRecommendProducts(@Query(ValidationPipe) query: ProductsRequestDto ) {
-        return await this.productsService.getRecommendProducts(query);
+    @Get('/before/recommendation-top')
+    async getTop20RecommendationProducts(@Query(ValidationPipe) query: ProductsRequestDto ) {
+        return await this.productsService.getRecommendationProducts(query);
+    }
+
+    @Get('/before/recommendation')
+    async getRecommedationProductsFromPurchaseHistory(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
+        
     }
 
     @ApiOperation({ summary: ' 추천 상품 on/off 설정'})

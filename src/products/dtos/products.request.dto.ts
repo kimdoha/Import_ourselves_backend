@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsString, Matches } from "class-validator";
+import { IsOptional, IsString, Matches } from "class-validator";
 import { PageRequest } from "helpers/page/page.request";
 
 export class ProductsRequestDto extends PageRequest{
@@ -11,4 +11,9 @@ export class ProductsRequestDto extends PageRequest{
     @IsString()
     @Matches('main|detail')
     type: string;
+
+    @ApiProperty()
+    @IsOptional()
+    @Matches('0|5|12|16')
+    filter: string;
 }

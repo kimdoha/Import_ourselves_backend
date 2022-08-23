@@ -11,17 +11,33 @@ import { ProductRepository } from './product.repository';
 export class ProductsService {
     constructor(@InjectRepository(Product) private readonly productRepository: ProductRepository) {}
 
-    async getRecommendProducts(query: ProductsRequestDto) {
+    async getRecommendationProducts(query: ProductsRequestDto) {
         const limit = Page.getLimit(query.limit);
         const offset = Page.getOffset(query.page, query.limit);
+        const filter = parseInt(query.filter);
 
-        const topProducts = await this.productRepository.createQueryBuilder()
-        .select([ 'product_idx, product_name, product_img, order_number'])
-        .where('order_number >= 0')
-        .orderBy('order_number', 'DESC')
-        .limit(limit)
-        .offset(offset)
-        .getRawMany();
+
+        let topProducts;
+        if(filter) {
+            topProducts = await this.productRepository.createQueryBuilder()
+            .select([ 'product_idx, department_idx, product_name, product_img, order_number'])
+            .where('order_number >= 0 and department_idx in (:filter)', { filter })
+            .orderBy('order_number', 'DESC')
+            .limit(limit)
+            .offset(offset)
+            .getRawMany();
+
+        } else {
+
+            topProducts = await this.productRepository.createQueryBuilder()
+            .select([ 'product_idx, department_idx, product_name, product_img, order_number'])
+            .where('order_number >= 0')
+            .orderBy('order_number', 'DESC')
+            .limit(limit)
+            .offset(offset)
+            .getRawMany();
+        }
+   
 
         return {
             isSuccess: true,
