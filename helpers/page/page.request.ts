@@ -1,13 +1,13 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsPositive } from "class-validator";
+import { IsNotEmpty } from "class-validator";
 
 export abstract class PageRequest {
     
     @ApiProperty()
-    @IsPositive()
+    @IsNotEmpty()
     page: number | 1;
 
     @ApiProperty()
-    @IsPositive()
+    @IsNotEmpty()
     limit: number | 10;
 }
