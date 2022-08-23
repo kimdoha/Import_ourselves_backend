@@ -46,4 +46,24 @@ export class ProductsService {
             data: topProducts
         };
     }
+
+    async getRecommendationProductsFromPurchase(query: ProductsRequestDto) {
+        const limit = Page.getLimit(query.limit);
+        const offset = Page.getOffset(query.page, query.limit);
+        const filter = parseInt(query.filter);
+
+        let products;
+        if(filter) {
+            
+        } else {
+
+        }
+
+        return {
+            isSuccess: true,
+            statusCode: 200,
+            message: '구매 이력 기반 추천 상품 리스트 조회 성공',
+            data: products
+        };
+    }
 }

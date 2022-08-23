@@ -37,14 +37,20 @@ export class ProductsController {
         return await this.productsService.getRecommendationProducts(query);
     }
 
+    @ApiOperation({ summary: '구매 이력 기반 추천 상품 리스트 조회' })
+    @ApiOkResponse({
+        status: 200,
+        description: '구매 이력 기반 추천 상품 리스트 조회 성공',
+        type: responseSuccessDto
+    })
     @Get('/before/recommendation')
-    async getRecommedationProductsFromPurchaseHistory(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
-        
+    async getRecommedationProductsFromPurchaseHistory(@Query(ValidationPipe) query: ProductsRequestDto) {
+        return await this.productsService.getRecommendationProductsFromPurchase(query);
     }
 
     @ApiOperation({ summary: ' 추천 상품 on/off 설정'})
     @ApiOkResponse({
-
+        status: 200
     })
     async setRecommendProductForMe(@GetUser() user) {
         
