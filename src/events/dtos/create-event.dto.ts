@@ -1,30 +1,27 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsBoolean } from "class-validator";
+import { IsNumber } from "class-validator";
 
 export class CreateEventDto {
     
     @ApiProperty()
-    @IsBoolean()
+    @IsNumber()
     ques1: number;
     
     @ApiProperty()
-    @IsBoolean()
+    @IsNumber()
     ques2: number;
     
     @ApiProperty()
-    @IsBoolean()
+    @IsNumber()
     ques3: number;
     
     @ApiProperty()
-    @IsBoolean()
+    @IsNumber()
     ques4: number;
     
     @ApiProperty()
-    @IsBoolean()
+    @IsNumber()
     ques5: number;
     
-    @ApiProperty()
-    @IsBoolean()
-    ques6: number;
 
 }

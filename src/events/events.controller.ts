@@ -3,7 +3,8 @@ import {
     Controller, 
     Post, 
     UseGuards, 
-    UseInterceptors 
+    UseInterceptors, 
+    ValidationPipe
 } from '@nestjs/common';
 import { 
     ApiBearerAuth,
@@ -23,7 +24,6 @@ import { EventsService } from './events.service';
 @ApiBearerAuth('Authorization')
 @UseInterceptors(responseSuccessDto)
 @Controller('events')
-@UseGuards(JwtAuthGuard)
 export class EventsController {
     constructor(private eventsService: EventsService) {}
 
@@ -34,8 +34,9 @@ export class EventsController {
         type: responseSuccessDto,
     })
     @ApiBody({ type: CreateEventDto })
-    @Post()
-    async postEventResult(@GetUser() user: User, @Body() body: CreateEventDto ) {
+    @Post('/invite')
+    @UseGuards(JwtAuthGuard)
+    async postEventResult(@GetUser() user, @Body(ValidationPipe) body: CreateEventDto ) {
         return await this.eventsService.createEventResult(user.userIdx, body);
     }
 }
