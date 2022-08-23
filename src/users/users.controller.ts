@@ -37,7 +37,7 @@ export class UsersController {
     @ApiBody({ type: CreateUserDto })
     @Post('/sign-up')
     async signup(@Body(ValidationPipe) body: CreateUserDto) {
-        return await this.usersService.createUser(body.id, body.password, body.nickname);
+        return await this.usersService.createUser(body.userId, body.password, body.nickname);
     }
 
     @ApiOperation({ summary: '로그인' })
@@ -53,7 +53,7 @@ export class UsersController {
     @ApiBody({ type: LoginUserDto })
     @Post('/sign-in')
     async signIn(@Body(ValidationPipe) body: LoginUserDto) {
-        return await this.usersService.login(body.id, body.password);
+        return await this.usersService.login(body.userId, body.password);
     }
 
 

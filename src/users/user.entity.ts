@@ -1,4 +1,3 @@
-import { Event } from "src/events/event.entity";
 import { 
     Column, 
     CreateDateColumn, 
@@ -8,6 +7,7 @@ import {
     PrimaryGeneratedColumn, 
     UpdateDateColumn 
 } from "typeorm";
+import { Event } from "src/events/event.entity";
 
 @Entity('kurly.users')
 export class User {
@@ -16,7 +16,7 @@ export class User {
     userIdx: number;
 
     @Column()
-    id: string;
+    userId: string;
 
     @Column()
     password: string;

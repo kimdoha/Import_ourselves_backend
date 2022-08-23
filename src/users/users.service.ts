@@ -1,6 +1,6 @@
 import { 
     BadRequestException, 
-    Injectable 
+    Injectable,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { responseSuccessDto } from 'common/responses/global.reponse';
@@ -15,18 +15,18 @@ import { JwtService } from '@nestjs/jwt';
 export class UsersService {
 
     constructor(
-        @InjectRepository(User) private readonly userRepository: UserRepository,
-        private readonly jwtService: JwtService,
+        @InjectRepository(User) private userRepository: UserRepository,
+        private jwtService: JwtService,
     ) {}
 
-    async createUser(id: string, password: string, nickname: string){
-        if(await this.userRepository.findOneBy({ id })){
+    async createUser(userId: string, password: string, nickname: string){
+        if(await this.userRepository.findOneBy({ userId })){
             throw new BadRequestException('이미 존재하는 아이디입니다.');
         }
 
         const hashedPassword = await createHashedPassword(password);
 
-        const user = await this.userRepository.create({ id, password: hashedPassword, nickname });
+        const user = await this.userRepository.create({ userId, password: hashedPassword, nickname });
         await this.userRepository.save(user);
         
         return { 
@@ -37,8 +37,8 @@ export class UsersService {
         };
     }
 
-    async login(id: string, password: string) {
-        const user = await this.userRepository.findOneBy({ id });
+    async login(userId: string, password: string) {
+        const user = await this.userRepository.findOneBy({ userId });
         if(!user){
             throw new BadRequestException('아이디가 존재하지 않습니다.');
         }
@@ -46,13 +46,21 @@ export class UsersService {
         if(!(await bcrypt.compare(password, user.password))){
             throw new BadRequestException('비밀번호가 일치하지 않습니다.');
         }
-        const payload = { id };
 
+        const payload = { 
+            id: user.userIdx 
+        };
+
+        console.log(payload);
+        
         return { 
             isSuccess: true,
             statusCode: 200,
             message: '로그인 성공',
-            data: Object.assign(user, { password: undefined, accessToken: await this.jwtService.signAsync(payload) }) 
+            data: {
+                userIdx: payload.id,
+                accessToken: await this.jwtService.signAsync(payload),
+            }
         };
     }
 
