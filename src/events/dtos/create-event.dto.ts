@@ -1,27 +1,27 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNumber } from "class-validator";
+import { IsString } from "class-validator";
 
 export class CreateEventDto {
     
     @ApiProperty()
-    @IsNumber()
-    ques1: number;
+    @IsString()
+    ques1: string;
     
     @ApiProperty()
-    @IsNumber()
-    ques2: number;
+    @IsString()
+    ques2: string;
     
     @ApiProperty()
-    @IsNumber()
-    ques3: number;
+    @IsString()
+    ques3: string;
     
     @ApiProperty()
-    @IsNumber()
-    ques4: number;
+    @IsString()
+    ques4: string;
     
     @ApiProperty()
-    @IsNumber()
-    ques5: number;
+    @IsString()
+    ques5: string;
     
 
 }
