@@ -18,7 +18,8 @@ import { EventsModule } from './events/events.module';
       isGlobal: true,
     }),
     UsersModule, 
-    ProductsModule, EventsModule
+    ProductsModule, 
+    EventsModule
   ],
   controllers: [AppController],
   providers: [AppService],

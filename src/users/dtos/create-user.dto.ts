@@ -5,7 +5,7 @@ export class CreateUserDto {
 
     @ApiProperty({ description: '사용자 아이디' })
     @IsString()
-    id: string;
+    userId: string;
 
     @ApiProperty({ description: '사용자 비밀번호' })
     @IsString()

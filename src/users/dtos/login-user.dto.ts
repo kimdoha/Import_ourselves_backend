@@ -5,7 +5,7 @@ export class LoginUserDto {
     
     @ApiProperty({})
     @IsString()
-    id: string;
+    userId: string;
 
     @ApiProperty({})
     @IsString()

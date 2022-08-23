@@ -1,7 +1,10 @@
+import { User } from "src/users/user.entity";
 import { 
     Column, 
     CreateDateColumn, 
     Entity, 
+    JoinColumn, 
+    ManyToOne, 
     PrimaryGeneratedColumn, 
     UpdateDateColumn 
 } from "typeorm";
@@ -32,4 +35,8 @@ export class Event {
     
     @UpdateDateColumn()
     updatedAt: Date | null;
+
+    @ManyToOne(type => User, user => user.events, { eager: false })
+    @JoinColumn({ name: 'user_idx'})
+    userIdx: number;
 }

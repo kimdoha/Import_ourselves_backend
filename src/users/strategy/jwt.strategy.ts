@@ -8,7 +8,6 @@ import { PassportStrategy } from "@nestjs/passport";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { User } from "../user.entity";
-import { validate } from "class-validator";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -22,8 +21,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     }
 
     async validate(payload: any) {
-            return {
-                userIdx: payload.id,
-            }
+        return {
+            userIdx: payload.id,
+        }
     }
 }

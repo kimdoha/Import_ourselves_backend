@@ -1,4 +1,5 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Department } from "./department.entity";
 
 @Entity('kurly.products')
 export class Product {
@@ -7,17 +8,45 @@ export class Product {
     productIdx: number;
 
     @Column()
-    categoryIdx: number;
+    productName: string;
 
     @Column()
-    product: string;
+    productImg: string | null;
 
     @Column()
-    productImg: string;
+    isOrganic: number;
+
+    @Column()
+    hotel: number;
+
+    @Column()
+    camping: number;
+
+    @Column()
+    make: number;
+
+    @Column()
+    instant: number;
+
+    @Column()
+    riceLover: number;
+
+    @Column()
+    desertLover: number;
+
+    @Column()
+    meatLover: number;
+
+    @Column()
+    vegetableLover: number;
 
     @CreateDateColumn()
     createdAt: Date
 
     @UpdateDateColumn()
     updatedAt: Date | null
+
+    @ManyToOne(type => Department, department => department.products, { eager: false })
+    @JoinColumn({ name: 'department_idx'})
+    departmentIdx: number;
 }

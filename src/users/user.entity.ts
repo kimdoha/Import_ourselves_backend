@@ -3,30 +3,34 @@ import {
     CreateDateColumn, 
     DeleteDateColumn, 
     Entity, 
+    OneToMany, 
     PrimaryGeneratedColumn, 
     UpdateDateColumn 
 } from "typeorm";
+import { Event } from "src/events/event.entity";
 
 @Entity('kurly.users')
 export class User {
 
     @PrimaryGeneratedColumn()
-    userIdx: number
+    userIdx: number;
 
     @Column()
-    id: string
+    userId: string;
 
     @Column()
-    password: string
+    password: string;
 
     @Column()
-    nickname: string
+    nickname: string;
 
     @CreateDateColumn()
-    createdAt: Date
+    createdAt: Date;
 
     @UpdateDateColumn()
-    updatedAt: Date | null
+    updatedAt: Date | null;
 
+    @OneToMany(type => Event, (event: Event) => event.userIdx, { eager: false })
+    events: Event[];
 
 }
