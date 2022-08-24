@@ -9,7 +9,7 @@ import { Rectable } from './rectable.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User, Product, Rectable]),
+    TypeOrmModule.forFeature([User, Product, Rectable, Event]),
     UsersModule,
   ],
   controllers: [ProductsController],
