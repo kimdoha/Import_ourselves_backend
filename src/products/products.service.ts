@@ -1,6 +1,8 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Page } from 'helpers/page/page';
+import { Event } from 'src/events/event.entity';
+import { EventRepository } from 'src/events/event.repository';
 import { ProductsRequestDto } from './dtos/products.request.dto';
 import { Product } from './product.entity';
 import { ProductRepository } from './product.repository';
@@ -13,6 +15,7 @@ import { RectableRepository } from './rectable.repository';
 export class ProductsService {
     constructor(
         @InjectRepository(Product) private readonly productRepository: ProductRepository,
+        @InjectRepository(Event) private eventRepository: EventRepository,
         @InjectRepository(Rectable) private readonly rectableRepository: RectableRepository,
     ) {}
 
@@ -94,12 +97,50 @@ export class ProductsService {
 
         let products;
 
+        const event = await this.eventRepository.createQueryBuilder()
+        .select([`ques1, ques2, ques3, ques4, ques5`])
+        .where('user_idx = :userIdx', { userIdx })
+        .orderBy('created_at', 'DESC')
+        .limit(1)
+        .getRawOne();
+
+        if(!event) {
+        throw new BadRequestException('이벤트 참여 이력이 없습니다.');
+        }
+
+
+        const ques1 = parseInt(event.ques1);
+        const n_ques1 = ques1 == 0 ? 1 : 0;
+
+        const ques2 = parseInt(event.ques2);
+        const n_ques2 = ques2 == 0 ? 1 : 0;
+
+        const ques3 = parseInt(event.ques3);
+        const n_ques3 = ques3 == 0 ? 1 : 0;
+
+        const ques4 = parseInt(event.ques4);
+        const n_ques4 = ques4 == 0 ? 1 : 0;
+
+        const ques5 = parseInt(event.ques5);
+        const n_ques5 = ques5 == 0 ? 1 : 0;
+
         if(filter) {
+
             products = await this.rectableRepository.createQueryBuilder('rectable')
-            .select([''])
+            .select([`score + 
+                    ${ques1} * 0.05 * product.hotel +
+                    ${n_ques1} * 0.05 * product.camping + 
+                    ${ques2} * 0.1 * product.make + 
+                    ${n_ques2} * 0.1 * product.instant + 
+                    ${ques3} * 0.05 * product.rice_lover + 
+                    ${n_ques3} * 0.05 * product.desert_lover + 
+                    ${ques4} * 0.15 * product.meat_lover + 
+                    ${n_ques4} * 0.15 * product.vegetable_lover + 
+                    ${ques5} * 0.05 * product.is_organic + 
+                    ${n_ques5} * 0.05 * product.x_organic
+                     as converted_score`])
             .where('product.department_idx in (:filter)', { filter })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
-            .orderBy('score', 'DESC')
             .limit(limit)
             .offset(offset)
             .getRawMany();
@@ -107,12 +148,23 @@ export class ProductsService {
         } else {
 
             products = await this.rectableRepository.createQueryBuilder('rectable')
-            .select(['rectable_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .select([`score + 
+                    ${ques1} * 0.05 * product.hotel +
+                    ${n_ques1} * 0.05 * product.camping + 
+                    ${ques2} * 0.1 * product.make + 
+                    ${n_ques2} * 0.1 * product.instant + 
+                    ${ques3} * 0.05 * product.rice_lover + 
+                    ${n_ques3} * 0.05 * product.desert_lover + 
+                    ${ques4} * 0.15 * product.meat_lover + 
+                    ${n_ques4} * 0.15 * product.vegetable_lover + 
+                    ${ques5} * 0.05 * product.is_organic + 
+                    ${n_ques5} * 0.05 * product.x_organic
+                     as converted_score`])
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
-            .orderBy('score', 'DESC')
             .limit(limit)
             .offset(offset)
             .getRawMany();
+
         }
 
         return {

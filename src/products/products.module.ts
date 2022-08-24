@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Event } from 'src/events/event.entity';
 import { User } from 'src/users/user.entity';
 import { UsersModule } from 'src/users/users.module';
 import { Product } from './product.entity';

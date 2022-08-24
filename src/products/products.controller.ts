@@ -43,7 +43,7 @@ export class ProductsController {
     })
     @ApiOkResponse({
         status: 200,
-        description: '추천 상품 리스트 조회 성공',
+        description: '[테스트 전] 추천 상품 리스트 조회 성공',
         type: responseSuccessDto
     })
     @Get('/before/recommendation')
@@ -58,6 +58,7 @@ export class ProductsController {
         description: '[테스트 후] 추천 상품 리스트 조회 성공',
         type: responseSuccessDto
     })
+    @UseGuards(JwtAuthGuard)
     @Get('/after/recommendation')
     async getRecommendationProducts(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
         return await this.productsService.getRecommendationProductsFromEvent(user.userIdx, query);
