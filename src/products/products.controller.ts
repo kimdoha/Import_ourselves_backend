@@ -38,17 +38,18 @@ export class ProductsController {
     }
 
     @ApiOperation({ 
-        summary: '구매 이력 기반 추천 상품 리스트 조회',
+        summary: '[테스트 전] 구매 이력 기반 추천 상품 리스트 조회',
         description: '카테고리 필터 설정 : filter(5, 12, 16) | 카테고리 필터 해제 : filter(0)'
     })
     @ApiOkResponse({
         status: 200,
-        description: '[테스트 전] 추천 상품 리스트 조회 성공',
+        description: '추천 상품 리스트 조회 성공',
         type: responseSuccessDto
     })
+    @UseGuards(JwtAuthGuard)
     @Get('/before/recommendation')
-    async getRecommedationProductsFromPurchaseHistory(@Query(ValidationPipe) query: ProductsRequestDto) {
-        return await this.productsService.getRecommendationProductsFromPurchase(query);
+    async getRecommedationProductsFromPurchaseHistory(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
+        return await this.productsService.getRecommendationProductsFromPurchase(user.userIdx, query);
     }
 
 

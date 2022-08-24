@@ -55,7 +55,7 @@ export class ProductsService {
         };
     }
 
-    async getRecommendationProductsFromPurchase(query: ProductsRequestDto) {
+    async getRecommendationProductsFromPurchase(userIdx: number, query: ProductsRequestDto) {
         const limit = Page.getLimit(query.limit);
         const offset = Page.getOffset(query.page, query.limit);
         const filter = parseInt(query.filter);
@@ -63,8 +63,9 @@ export class ProductsService {
         let products;
         if(filter) {
             products = await this.rectableRepository.createQueryBuilder('rectable')
-            .select(['rectable_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .select(['rectable_idx, rectable.user_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
             .where('product.department_idx in (:filter)', { filter })
+            .andWhere('rectable.user_idx = :userIdx', { userIdx })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
             .orderBy('score', 'DESC')
             .limit(limit)
@@ -74,7 +75,8 @@ export class ProductsService {
         } else {
 
             products = await this.rectableRepository.createQueryBuilder('rectable')
-            .select(['rectable_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .select(['rectable_idx, rectable.user_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .where('rectable.user_idx = :userIdx', { userIdx })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
             .orderBy('score', 'DESC')
             .limit(limit)
