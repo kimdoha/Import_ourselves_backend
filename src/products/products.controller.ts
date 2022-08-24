@@ -1,6 +1,7 @@
 import { 
     Controller, 
     Get, 
+    Post, 
     Query, 
     UseGuards, 
     UseInterceptors, 
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { 
     ApiBearerAuth,
+    ApiCreatedResponse,
     ApiOkResponse, 
     ApiOperation, 
     ApiTags 
@@ -17,6 +19,7 @@ import { JwtAuthGuard } from 'common/guards/jwt-auth.guard';
 import { responseSuccessDto } from 'common/responses/global.reponse';
 import { userInfo } from 'os';
 import { ProductsRequestDto } from './dtos/products.request.dto';
+import { RecommendationOffRequestDto } from './dtos/recommendation-off.request';
 import { ProductsService } from './products.service';
 
 @ApiTags('products')
@@ -38,7 +41,7 @@ export class ProductsController {
     }
 
     @ApiOperation({ 
-        summary: '구매 이력 기반 추천 상품 리스트 조회',
+        summary: '[테스트 전] 구매 이력 기반 추천 상품 리스트 조회',
         description: '카테고리 필터 설정 : filter(5, 12, 16) | 카테고리 필터 해제 : filter(0)'
     })
     @ApiOkResponse({
@@ -46,9 +49,10 @@ export class ProductsController {
         description: '추천 상품 리스트 조회 성공',
         type: responseSuccessDto
     })
+    @UseGuards(JwtAuthGuard)
     @Get('/before/recommendation')
-    async getRecommedationProductsFromPurchaseHistory(@Query(ValidationPipe) query: ProductsRequestDto) {
-        return await this.productsService.getRecommendationProductsFromPurchase(query);
+    async getRecommedationProductsFromPurchaseHistory(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
+        return await this.productsService.getRecommendationProductsFromPurchase(user.userIdx, query);
     }
 
 
@@ -58,18 +62,24 @@ export class ProductsController {
         description: '[테스트 후] 추천 상품 리스트 조회 성공',
         type: responseSuccessDto
     })
+    @UseGuards(JwtAuthGuard)
     @Get('/after/recommendation')
     async getRecommendationProducts(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
         return await this.productsService.getRecommendationProductsFromEvent(user.userIdx, query);
     }
 
 
-    @ApiOperation({ summary: ' 추천 상품 on/off 설정'})
-    @ApiOkResponse({
-        status: 200
+    @ApiOperation({ summary: ' 추천 상품 off 설정'})
+    @ApiCreatedResponse({
+        status: 201,
+        description: '추천 상품 off 설정 성공',
+        type: responseSuccessDto,
     })
-    async setRecommendProductForMe(@GetUser() user) {
-        
+    @UseGuards(JwtAuthGuard)
+    @Post('/recommendation-off')
+    async setRecommendationOff(@GetUser() user, @Query(ValidationPipe) query: RecommendationOffRequestDto) {
+        return await this.productsService.setRecommendationOff(user.userIdx, parseInt(query.departmentIdx));
     }
     
+
 }
