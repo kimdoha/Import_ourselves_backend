@@ -8,11 +8,6 @@ export class ProductsRequestDto extends PageRequest{
     }
 
     @ApiProperty()
-    @IsString()
-    @Matches('main|detail')
-    type: string;
-
-    @ApiProperty()
     @IsOptional()
     @Matches('0|5|12|16')
     filter: string;

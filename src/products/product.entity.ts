@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 import { Department } from "./department.entity";
+import { Rectable } from "./rectable.entity";
 
 @Entity('kurly.products')
 export class Product {
@@ -49,4 +50,7 @@ export class Product {
     @ManyToOne(type => Department, department => department.products, { eager: false })
     @JoinColumn({ name: 'department_idx'})
     departmentIdx: number;
+
+    @OneToMany(type => Rectable, (rect: Rectable) => rect.productIdx, { eager: false })
+    rectables: Rectable[]
 }

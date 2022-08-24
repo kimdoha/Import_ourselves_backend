@@ -8,6 +8,7 @@ import {
     UpdateDateColumn 
 } from "typeorm";
 import { Event } from "src/events/event.entity";
+import { Rectable } from "src/products/rectable.entity";
 
 @Entity('kurly.users')
 export class User {
@@ -32,5 +33,9 @@ export class User {
 
     @OneToMany(type => Event, (event: Event) => event.userIdx, { eager: false })
     events: Event[];
+
+    @OneToMany(type => Rectable, (rect: Rectable) => rect.userIdx, { eager: false })
+    rectables: Rectable[]
+
 
 }
