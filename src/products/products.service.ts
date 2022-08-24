@@ -66,12 +66,25 @@ export class ProductsService {
         const offset = Page.getOffset(query.page, query.limit);
         const filter = parseInt(query.filter);
 
-        let products;
+        const departmentsList = await this.exceptRepository.createQueryBuilder()
+        .select([ 'department_idx '])
+        .where('user_idx = :userIdx', { userIdx })
+        .getRawMany();
+
+        
+
+        let products = [], excepts = [];
+        if(departmentsList.length > 0){
+            departmentsList.map(dep => excepts.push(parseInt(dep.department_idx)));
+        }
+        
+
         if(filter) {
             products = await this.rectableRepository.createQueryBuilder('rectable')
             .select(['rectable_idx, rectable.user_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
             .where('product.department_idx in (:filter)', { filter })
             .andWhere('rectable.user_idx = :userIdx', { userIdx })
+            .andWhere('product.department_idx not in (:...excepts)', { excepts })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
             .orderBy('score', 'DESC')
             .limit(limit)
@@ -83,6 +96,7 @@ export class ProductsService {
             products = await this.rectableRepository.createQueryBuilder('rectable')
             .select(['rectable_idx, rectable.user_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
             .where('rectable.user_idx = :userIdx', { userIdx })
+            .andWhere('product.department_idx not in (:...excepts)', { excepts })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
             .orderBy('score', 'DESC')
             .limit(limit)
@@ -103,7 +117,18 @@ export class ProductsService {
         const offset = Page.getOffset(query.page, query.limit);
         const filter = parseInt(query.filter);
 
-        let products;
+        const departmentsList = await this.exceptRepository.createQueryBuilder()
+        .select([ 'department_idx '])
+        .where('user_idx = :userIdx', { userIdx })
+        .getRawMany();
+
+
+        let products = [], excepts = [];
+        if(departmentsList.length > 0){
+            departmentsList.map(dep => excepts.push(parseInt(dep.department_idx)));
+        }
+
+        console.log(excepts);
 
         const event = await this.eventRepository.createQueryBuilder()
         .select([`ques1, ques2, ques3, ques4, ques5`])
@@ -113,7 +138,7 @@ export class ProductsService {
         .getRawOne();
 
         if(!event) {
-        throw new BadRequestException('이벤트 참여 이력이 없습니다.');
+            throw new BadRequestException('이벤트 참여 이력이 없습니다.');
         }
 
 
@@ -148,6 +173,7 @@ export class ProductsService {
                     ${n_ques5} * 0.05 * product.x_organic
                      as converted_score`])
             .where('product.department_idx in (:filter)', { filter })
+            .andWhere('product.department_idx not in (:...excepts)', { excepts })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
             .limit(limit)
             .offset(offset)
@@ -168,6 +194,7 @@ export class ProductsService {
                     ${ques5} * 0.05 * product.is_organic + 
                     ${n_ques5} * 0.05 * product.x_organic
                      as converted_score`])
+            .where('product.department_idx not in (:...excepts)', { excepts })
             .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
             .limit(limit)
             .offset(offset)
