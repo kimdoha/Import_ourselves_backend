@@ -1,6 +1,7 @@
 import { 
     Controller, 
     Get, 
+    Post, 
     Query, 
     UseGuards, 
     UseInterceptors, 
@@ -8,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { 
     ApiBearerAuth,
+    ApiCreatedResponse,
     ApiOkResponse, 
     ApiOperation, 
     ApiTags 
@@ -17,6 +19,7 @@ import { JwtAuthGuard } from 'common/guards/jwt-auth.guard';
 import { responseSuccessDto } from 'common/responses/global.reponse';
 import { userInfo } from 'os';
 import { ProductsRequestDto } from './dtos/products.request.dto';
+import { RecommendationOffRequestDto } from './dtos/recommendation-off.request';
 import { ProductsService } from './products.service';
 
 @ApiTags('products')
@@ -66,12 +69,17 @@ export class ProductsController {
     }
 
 
-    @ApiOperation({ summary: ' 추천 상품 on/off 설정'})
-    @ApiOkResponse({
-        status: 200
+    @ApiOperation({ summary: ' 추천 상품 off 설정'})
+    @ApiCreatedResponse({
+        status: 201,
+        description: '추천 상품 off 설정 성공',
+        type: responseSuccessDto,
     })
-    async setRecommendProductForMe(@GetUser() user) {
-        
+    @UseGuards(JwtAuthGuard)
+    @Post('/recommendation-off')
+    async setRecommendationOff(@GetUser() user, @Query(ValidationPipe) query: RecommendationOffRequestDto) {
+        return await this.productsService.setRecommendationOff(user.userIdx, parseInt(query.departmentIdx));
     }
     
+
 }

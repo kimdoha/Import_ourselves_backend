@@ -1,13 +1,18 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { 
+    BadRequestException, 
+    Injectable 
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Page } from 'helpers/page/page';
 import { Event } from 'src/events/event.entity';
 import { EventRepository } from 'src/events/event.repository';
 import { ProductsRequestDto } from './dtos/products.request.dto';
-import { Product } from './product.entity';
+import { Product } from './entities/product.entity';
 import { ProductRepository } from './product.repository';
-import { Rectable } from './rectable.entity';
+import { Rectable } from './entities/rectable.entity';
 import { RectableRepository } from './rectable.repository';
+import { Except } from './entities/except.entity';
+import { ExceptRepository } from './except.repository';
 
 // 유저가 구매했던 기반으로 -> score 상위 20개
 // 이벤트가 참여했던 이력도 함께 추가
@@ -17,6 +22,7 @@ export class ProductsService {
         @InjectRepository(Product) private readonly productRepository: ProductRepository,
         @InjectRepository(Event) private eventRepository: EventRepository,
         @InjectRepository(Rectable) private readonly rectableRepository: RectableRepository,
+        @InjectRepository(Except) private readonly exceptRepository: ExceptRepository,
     ) {}
 
     async getRecommendationProducts(query: ProductsRequestDto) {
@@ -174,6 +180,17 @@ export class ProductsService {
             statusCode: 200,
             message: '[테스트 후] 추천 상품 리스트 조회 성공',
             data: products
+        };
+    }
+
+    async setRecommendationOff(userIdx: number, departmentIdx: number) {
+        const except = await this.exceptRepository.create({ userIdx, departmentIdx });
+        await this.exceptRepository.save(except);
+
+        return {
+            isSuccess: true,
+            statusCode: 201,
+            message: '추천 상품 off 설정 성공'
         };
     }
 

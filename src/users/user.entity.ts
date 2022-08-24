@@ -8,7 +8,8 @@ import {
     UpdateDateColumn 
 } from "typeorm";
 import { Event } from "src/events/event.entity";
-import { Rectable } from "src/products/rectable.entity";
+import { Rectable } from "src/products/entities/rectable.entity";
+import { Except } from "src/products/entities/except.entity";
 
 @Entity('kurly.users')
 export class User {
@@ -37,5 +38,6 @@ export class User {
     @OneToMany(type => Rectable, (rect: Rectable) => rect.userIdx, { eager: false })
     rectables: Rectable[]
 
-
+    @OneToMany(type => Except, (except: Except) => except.userIdx, { eager: false })
+    excepts: Except[]
 }
