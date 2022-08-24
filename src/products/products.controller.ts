@@ -69,7 +69,7 @@ export class ProductsController {
     }
 
 
-    @ApiOperation({ summary: ' 추천 상품 off 설정'})
+    @ApiOperation({ summary: '추천 상품 off 설정'})
     @ApiCreatedResponse({
         status: 201,
         description: '추천 상품 off 설정 성공',
