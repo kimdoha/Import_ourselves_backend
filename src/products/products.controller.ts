@@ -32,7 +32,7 @@ export class ProductsController {
         description: '[헤더] 추천 상품 Top 리스트 조회 성공',
         type: responseSuccessDto
     })
-    @Get('/before/recommendation-top')
+    @Get('/recommendation-top')
     async getTop20RecommendationProducts(@Query(ValidationPipe) query: ProductsRequestDto ) {
         return await this.productsService.getRecommendationProducts(query);
     }
@@ -43,13 +43,26 @@ export class ProductsController {
     })
     @ApiOkResponse({
         status: 200,
-        description: '구매 이력 기반 추천 상품 리스트 조회 성공',
+        description: '추천 상품 리스트 조회 성공',
         type: responseSuccessDto
     })
     @Get('/before/recommendation')
     async getRecommedationProductsFromPurchaseHistory(@Query(ValidationPipe) query: ProductsRequestDto) {
         return await this.productsService.getRecommendationProductsFromPurchase(query);
     }
+
+
+    @ApiOperation({ summary: '[테스트 후] 구매 및 이벤트 이력 기반 추천 상품 리스트 조회'})
+    @ApiOkResponse({
+        status: 200,
+        description: '[테스트 후] 추천 상품 리스트 조회 성공',
+        type: responseSuccessDto
+    })
+    @Get('/after/recommendation')
+    async getRecommendationProducts(@GetUser() user, @Query(ValidationPipe) query: ProductsRequestDto) {
+        return await this.productsService.getRecommendationProductsFromEvent(user.userIdx, query);
+    }
+
 
     @ApiOperation({ summary: ' 추천 상품 on/off 설정'})
     @ApiOkResponse({

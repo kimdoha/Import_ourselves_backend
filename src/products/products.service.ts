@@ -86,4 +86,41 @@ export class ProductsService {
             data: products
         };
     }
+
+    async getRecommendationProductsFromEvent(userIdx: number, query: ProductsRequestDto) {
+        const limit = Page.getLimit(query.limit);
+        const offset = Page.getOffset(query.page, query.limit);
+        const filter = parseInt(query.filter);
+
+        let products;
+
+        if(filter) {
+            products = await this.rectableRepository.createQueryBuilder('rectable')
+            .select([''])
+            .where('product.department_idx in (:filter)', { filter })
+            .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
+            .orderBy('score', 'DESC')
+            .limit(limit)
+            .offset(offset)
+            .getRawMany();
+
+        } else {
+
+            products = await this.rectableRepository.createQueryBuilder('rectable')
+            .select(['rectable_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
+            .orderBy('score', 'DESC')
+            .limit(limit)
+            .offset(offset)
+            .getRawMany();
+        }
+
+        return {
+            isSuccess: true,
+            statusCode: 200,
+            message: '[테스트 후] 추천 상품 리스트 조회 성공',
+            data: products
+        };
+    }
+
 }
