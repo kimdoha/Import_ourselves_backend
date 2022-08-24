@@ -37,7 +37,10 @@ export class ProductsController {
         return await this.productsService.getRecommendationProducts(query);
     }
 
-    @ApiOperation({ summary: '구매 이력 기반 추천 상품 리스트 조회' })
+    @ApiOperation({ 
+        summary: '구매 이력 기반 추천 상품 리스트 조회',
+        description: '카테고리 필터 설정 : filter(5, 12, 16) | 카테고리 필터 해제 : filter(0)'
+    })
     @ApiOkResponse({
         status: 200,
         description: '구매 이력 기반 추천 상품 리스트 조회 성공',

@@ -4,12 +4,17 @@ import { Page } from 'helpers/page/page';
 import { ProductsRequestDto } from './dtos/products.request.dto';
 import { Product } from './product.entity';
 import { ProductRepository } from './product.repository';
+import { Rectable } from './rectable.entity';
+import { RectableRepository } from './rectable.repository';
 
 // 유저가 구매했던 기반으로 -> score 상위 20개
 // 이벤트가 참여했던 이력도 함께 추가
 @Injectable()
 export class ProductsService {
-    constructor(@InjectRepository(Product) private readonly productRepository: ProductRepository) {}
+    constructor(
+        @InjectRepository(Product) private readonly productRepository: ProductRepository,
+        @InjectRepository(Rectable) private readonly rectableRepository: RectableRepository,
+    ) {}
 
     async getRecommendationProducts(query: ProductsRequestDto) {
         const limit = Page.getLimit(query.limit);
@@ -54,9 +59,24 @@ export class ProductsService {
 
         let products;
         if(filter) {
-            
+            products = await this.rectableRepository.createQueryBuilder('rectable')
+            .select(['rectable_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .where('product.department_idx in (:filter)', { filter })
+            .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
+            .orderBy('score', 'DESC')
+            .limit(limit)
+            .offset(offset)
+            .getRawMany();
+
         } else {
 
+            products = await this.rectableRepository.createQueryBuilder('rectable')
+            .select(['rectable_idx, rectable.product_idx, score, department_idx, product_name, product_img'])
+            .leftJoin(Product, 'product', 'product.product_idx = rectable.product_idx')
+            .orderBy('score', 'DESC')
+            .limit(limit)
+            .offset(offset)
+            .getRawMany();
         }
 
         return {
