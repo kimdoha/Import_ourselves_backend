@@ -28,8 +28,6 @@ $ npm run start
 $ npm run start:dev
 
 ```
-## docs
-[Swagger 명세서](http://15.164.90.73:3000/docs)
 
 </br>
 
