@@ -1,14 +1,8 @@
 # Market Kurly Hackathon
-> Open AI(ChatGPT)를 활용한 사용자 맞춤 감정 분석 플랫폼 • <b>백엔드</b> 레포지토리  
+> 마켓컬리 해커톤 • <b>백엔드</b> 레포지토리
 
 <br></br>
 
-<div align=left>
-
-</div>
-
-
-<br></br>
 
 ### System Architecture
 ---
@@ -18,3 +12,9 @@
   height = 80%
   />
 </center>
+
+
+### Feature
+- 구매 이력을 통한 user의 feature 파악
+- user의 취향을 확인하기 위한 행사 페이지 기능 구현
+- 추천 목록의 만족도 확인 및 추천 리스트 제거 기능
